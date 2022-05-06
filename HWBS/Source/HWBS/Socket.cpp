@@ -116,6 +116,33 @@ namespace HWBS
 		return PResult::P_Success;
 	}
 
+	PResult Socket::Accept(Socket& outSocket)
+	{
+		SocketHandle acceptedConnectionHandle = accept(m_Handle, nullptr, nullptr); // Blocking!
+		if (acceptedConnectionHandle == INVALID_SOCKET)
+		{
+			int error = WSAGetLastError();
+			return PResult::P_NotYetImplemented;
+		}
+
+		outSocket = Socket(IPVersion::IPv4, acceptedConnectionHandle);
+
+		return PResult::P_Success;
+	}
+
+	PResult Socket::Connect(IPEndpoint endpoint)
+	{
+		sockaddr_in addr = endpoint.GetSockaddrIPv4();
+		int result = connect(m_Handle, (sockaddr*)(&addr), sizeof(sockaddr_in));
+		if (result != 0)
+		{
+			int error = WSAGetLastError();
+			return PResult::P_NotYetImplemented;
+		}
+
+		return PResult::P_Success;
+	}
+
 	SocketHandle Socket::GetHandle()
 	{
 		return m_Handle;

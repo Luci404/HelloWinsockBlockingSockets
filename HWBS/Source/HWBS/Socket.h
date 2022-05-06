@@ -22,10 +22,11 @@ namespace HWBS
 		PResult Bind(IPEndpoint endpoint);
 		PResult Listen(IPEndpoint endpoint, int backlog = 5);
 		PResult SetSocketOption(SocketOption option, bool enabled);
+		PResult Accept(Socket& outSocket);
+		PResult Connect(IPEndpoint endpoint);
 
 		SocketHandle GetHandle();
 		IPVersion GetIPVersion();
-	
 
 	private:
 		SocketHandle m_Handle;
