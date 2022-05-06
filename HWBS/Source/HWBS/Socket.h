@@ -4,7 +4,6 @@
 #include "HWBS/PResult.h"
 #include "HWBS/IPVersion.h"
 
-
 namespace HWBS
 {
 	enum class SocketOption
