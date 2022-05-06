@@ -8,27 +8,20 @@ int main()
 	{
 		std::cout << "Successfully initialized network" << std::endl;
 		
-		HWBS::IPEndpoint endpoint("www.google.com", 8080);
-		if (endpoint.GetIPVersion() == HWBS::IPVersion::IPv4)
-		{
-			std::cout << "Hostname: " << endpoint.GetHostname() << std::endl;
-			std::cout << "IP: " << endpoint.GetIPString() << std::endl;
-			std::cout << "Port: " << endpoint.GetPort() << std::endl;
-			std::cout << "IP Bytes: " << std::endl;
-			for (uint8_t digit : endpoint.GetIPBytes())
-			{
-				std::cout << (int)digit << std::endl;
-			}
-		}
-		else
-		{
-			std::cerr << "This is not an IPv4 address." << std::endl;
-		}
-
 		HWBS::Socket socket;
 		if (socket.Create() == HWBS::PResult::P_Success)
 		{
 			std::cout << "Successfully created socket." << std::endl;
+
+			// 127.0.0.1 is the loopback address, only connection from this mashine can connect.
+			if (socket.Bind(HWBS::IPEndpoint("127.0.0.1", 4790)) == HWBS::PResult::P_Success)
+			{
+				std::cout << "Socket successfully bound on port 4790." << std::endl;
+			}
+			else
+			{
+				std::cout << "Failed to bind socket to port 4790." << std::endl;
+			}
 
 			socket.Close();
 		}

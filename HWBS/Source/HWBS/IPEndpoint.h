@@ -4,19 +4,21 @@
 
 #include <string>
 #include <vector>
+#include <WS2tcpip.h>
 
 namespace HWBS
 {
 	class IPEndpoint
 	{
 	public:
-		IPEndpoint(std::string ipAddress, uint16_t port);
+		IPEndpoint(const char* ipAddress, uint16_t port);
 		
 		IPVersion GetIPVersion();
 		std::string GetHostname();
 		std::string GetIPString();
 		std::vector<uint8_t> GetIPBytes();
 		uint16_t GetPort();
+		sockaddr_in GetSockaddrIPv4();
 
 	private:
 		IPVersion m_IPVersion;

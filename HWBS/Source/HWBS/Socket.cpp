@@ -56,6 +56,21 @@ namespace HWBS
 		return PResult::P_Success;
 	}
 
+	PResult Socket::Bind(IPEndpoint endpoint)
+	{
+		sockaddr_in address = endpoint.GetSockaddrIPv4();
+		
+		int result = bind(m_Handle, (sockaddr*)&address, sizeof(sockaddr_in));
+		if (result != 0)
+		{
+			// An error occurred
+			int error = WSAGetLastError();
+			return PResult::P_NotYetImplemented;
+		}
+
+		return PResult::P_Success;
+	}
+
 	PResult Socket::SetSocketOption(SocketOption option, bool enabled)
 	{
 		BOOL value = enabled ? TRUE : FALSE;

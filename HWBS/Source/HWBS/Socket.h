@@ -3,6 +3,7 @@
 #include "HWBS/SocketHandle.h"
 #include "HWBS/PResult.h"
 #include "HWBS/IPVersion.h"
+#include "HWBS/IPEndpoint.h"
 
 namespace HWBS
 {
@@ -18,6 +19,7 @@ namespace HWBS
 
 		PResult Create();
 		PResult Close();
+		PResult Bind(IPEndpoint endpoint);
 		PResult SetSocketOption(SocketOption option, bool enabled);
 
 		SocketHandle GetHandle();
