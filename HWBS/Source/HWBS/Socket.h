@@ -20,6 +20,7 @@ namespace HWBS
 		PResult Create();
 		PResult Close();
 		PResult Bind(IPEndpoint endpoint);
+		PResult Listen(IPEndpoint endpoint, int backlog = 5);
 		PResult SetSocketOption(SocketOption option, bool enabled);
 
 		SocketHandle GetHandle();

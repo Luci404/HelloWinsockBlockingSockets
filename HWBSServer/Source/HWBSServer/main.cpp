@@ -14,13 +14,22 @@ int main()
 			std::cout << "Successfully created socket." << std::endl;
 
 			// 127.0.0.1 is the loopback address, only connection from this mashine can connect.
-			if (socket.Bind(HWBS::IPEndpoint("127.0.0.1", 4790)) == HWBS::PResult::P_Success)
+			/*if (socket.Bind(HWBS::IPEndpoint("127.0.0.1", 4790)) == HWBS::PResult::P_Success)
 			{
 				std::cout << "Socket successfully bound on port 4790." << std::endl;
 			}
 			else
 			{
 				std::cout << "Failed to bind socket to port 4790." << std::endl;
+			}*/
+
+			if (socket.Listen(HWBS::IPEndpoint("127.0.0.1", 4790)) == HWBS::PResult::P_Success)
+			{
+				std::cout << "Socket successfully listening on port 4790." << std::endl;
+			}
+			else
+			{
+				std::cout << "Failed to listen on port 4790." << std::endl;
 			}
 
 			socket.Close();

@@ -71,6 +71,23 @@ namespace HWBS
 		return PResult::P_Success;
 	}
 
+	PResult Socket::Listen(IPEndpoint endpoint, int backlog)
+	{
+		if (Bind(endpoint) != PResult::P_Success)
+		{
+			return PResult::P_NotYetImplemented;
+		}
+
+		int result = listen(m_Handle, backlog);
+		if (result != 0)
+		{
+			int error = WSAGetLastError();
+			return PResult::P_NotYetImplemented;
+		}
+
+		return PResult::P_Success;
+	}
+
 	PResult Socket::SetSocketOption(SocketOption option, bool enabled)
 	{
 		BOOL value = enabled ? TRUE : FALSE;
