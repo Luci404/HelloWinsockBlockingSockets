@@ -150,6 +150,37 @@ namespace HWBS
 		return PResult::P_Success;
 	}
 
+	PResult Socket::Send(void* data, uint32_t numberOfBytes, int& bytesSent)
+	{
+		bytesSent = send(m_Handle, (const char*)data, numberOfBytes, NULL);
+
+		if (bytesSent == SOCKET_ERROR)
+		{
+			int error = WSAGetLastError();
+			return PResult::P_NotYetImplemented;
+		}
+
+		return PResult::P_Success;
+	}
+
+	PResult Socket::Receive(void* destination, int numberOfBytes, int& bytesReceived)
+	{
+		bytesReceived = recv(m_Handle, (char*)destination, numberOfBytes, NULL);
+		
+		if (bytesReceived == 0) // If connection was gracefully closed
+		{
+			return PResult::P_NotYetImplemented;
+		}
+
+		if (bytesReceived == SOCKET_ERROR)
+		{
+			int error = WSAGetLastError();
+			return PResult::P_NotYetImplemented;
+		}
+
+		return PResult::P_Success;
+	}
+
 	SocketHandle Socket::GetHandle()
 	{
 		return m_Handle;
