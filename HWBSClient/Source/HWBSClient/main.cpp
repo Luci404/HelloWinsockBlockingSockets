@@ -21,8 +21,9 @@ int main()
 				a = 4;
 				b = 6;
 				c = 9;
+				std::string first("first"), second("second");
 				HWBS::Packet packet;
-				packet << a << b << c;
+				packet << a << b << c << first << second;
 				while (true)
 				{
 					HWBS::PResult result = socket.SendPacket(packet);

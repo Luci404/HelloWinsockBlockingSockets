@@ -21,6 +21,27 @@ namespace HWBS
 		return *this;
 	}
 
+	Packet& Packet::operator<<(std::string data)
+	{
+		*this << (uint32_t)data.size();
+		Append(data.data(), data.size());
+		return *this;
+	}
+
+	Packet& Packet::operator>>(std::string& data)
+	{
+		data.clear();
+
+		uint32_t stringSize = 0;
+		*this >> stringSize;
+
+		data.resize(stringSize);
+		data.assign((char*)&Buffer[ExtractionOffset], stringSize);
+		ExtractionOffset += stringSize; 
+
+		return *this;
+	}
+
 	Packet& Packet::operator>>(uint32_t& data)
 	{
 		data = *reinterpret_cast<uint32_t*>(&Buffer[ExtractionOffset]);

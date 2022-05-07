@@ -23,6 +23,7 @@ int main()
 					std::cout << "New connection accepted." << std::endl;
 
 					uint32_t a(0), b(0), c(0);
+					std::string first, second;
 					HWBS::Packet packet;
 					while (true)
 					{
@@ -31,8 +32,8 @@ int main()
 						if (result != HWBS::PResult::P_Success)
 							break;
 
-						packet >> a >> b >> c;
-						std::cout << a << ", " << b << ", " << c << std::endl;
+						packet >> a >> b >> c >> first >> second;
+						std::cout << a << ", " << b << ", " << c <<  ", " << first  << ", " << second << std::endl;
 					}
 
 					newConnection.Close();

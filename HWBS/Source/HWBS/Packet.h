@@ -3,6 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <vector>
 #include <winsock.h>
+#include <string>
 
 namespace HWBS
 {
@@ -14,6 +15,9 @@ namespace HWBS
 
 		Packet& operator<<(uint32_t data);
 		Packet& operator>>(uint32_t& data);
+
+		Packet& operator<<(std::string data);
+		Packet& operator>>(std::string& data);
 
 	public:
 		uint32_t ExtractionOffset = 0;
