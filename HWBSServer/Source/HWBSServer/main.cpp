@@ -22,25 +22,17 @@ int main()
 				{
 					std::cout << "New connection accepted." << std::endl;
 
-					std::string buffer = "";
+					uint32_t a(0), b(0), c(0);
+					HWBS::Packet packet;
 					while (true)
 					{
-						uint32_t bufferSize = 0;
-						int result = newConnection.ReceiveAll(&bufferSize, sizeof(uint32_t));
-						if (result != HWBS::PResult::P_Success)
-							break;
-						
-						bufferSize = ntohl(bufferSize);
 
-						if (bufferSize > HWBS::g_MaxPacketSize)
-							break;
-
-						buffer.resize(bufferSize);
-						result = newConnection.ReceiveAll(&buffer[0], bufferSize);
+						HWBS::PResult result = newConnection.ReceivePacket(packet);
 						if (result != HWBS::PResult::P_Success)
 							break;
 
-						std::cout << "[" << bufferSize << "] - " << buffer << std::endl;
+						packet >> a >> b >> c;
+						std::cout << a << ", " << b << ", " << c << std::endl;
 					}
 
 					newConnection.Close();

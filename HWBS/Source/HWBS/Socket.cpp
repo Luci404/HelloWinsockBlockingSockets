@@ -166,7 +166,7 @@ namespace HWBS
 	PResult Socket::Receive(void* destination, int numberOfBytes, int& bytesReceived)
 	{
 		bytesReceived = recv(m_Handle, (char*)destination, numberOfBytes, NULL);
-		
+
 		if (bytesReceived == 0) // If connection was gracefully closed
 		{
 			return PResult::P_GenericError;
@@ -217,6 +217,38 @@ namespace HWBS
 			}
 			totalBytesReceived += bytesReceived;
 		}
+
+		return PResult::P_Success;
+	}
+
+	PResult Socket::SendPacket(Packet& packet)
+	{
+		uint32_t encodedPacketSize = htonl(packet.Buffer.size());
+		PResult result = SendAll(&encodedPacketSize, sizeof(uint32_t));
+		if (result != PResult::P_Success)
+			return PResult::P_GenericError;
+
+		result = SendAll(packet.Buffer.data(), packet.Buffer.size());
+		if (result != PResult::P_Success)
+			return PResult::P_GenericError;
+
+		return PResult::P_Success;
+	}
+
+	PResult Socket::ReceivePacket(Packet& packet)
+	{
+		packet.Clear();
+
+		uint32_t encodedSize = 0;
+		PResult result = ReceiveAll(&encodedSize, sizeof(uint32_t));
+		if (result != PResult::P_Success)
+			return PResult::P_GenericError;
+
+		uint32_t bufferSize = ntohl(encodedSize);
+		packet.Buffer.resize(bufferSize);
+		result = ReceiveAll(&packet.Buffer[0], bufferSize);
+		if (result != PResult::P_Success)
+			return PResult::P_GenericError;
 
 		return PResult::P_Success;
 	}

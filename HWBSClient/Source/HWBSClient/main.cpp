@@ -17,22 +17,19 @@ int main()
 			{
 				std::cout << "Successfully connected to server." << std::endl;
 
-				std::string buffer = "Hello world from client!";
-				
+				uint32_t a, b, c;
+				a = 4;
+				b = 6;
+				c = 9;
+				HWBS::Packet packet;
+				packet << a << b << c;
 				while (true)
 				{
-					std::cout << "Attempting to send chunk of data..." << std::endl;
-					
-					uint32_t bufferSize = buffer.size();
-					bufferSize = htonl(bufferSize);
-					int result = socket.SendAll(&bufferSize, sizeof(uint32_t));
+					HWBS::PResult result = socket.SendPacket(packet);
 					if (result != HWBS::PResult::P_Success)
 						break;
 
-					result = socket.SendAll(buffer.data(), buffer.size());
-					if (result != HWBS::PResult::P_Success)
-						break;
-					
+					std::cout << "Attempting to send chunk of data..." << std::endl;
 					Sleep(500);
 				}
 			}

@@ -5,6 +5,7 @@
 #include "HWBS/IPVersion.h"
 #include "HWBS/IPEndpoint.h"
 #include "HWBS/Constants.h"
+#include "HWBS/Packet.h"
 
 namespace HWBS
 {
@@ -29,6 +30,8 @@ namespace HWBS
 		PResult Receive(void* destination, int numberOfBytes, int& bytesReceived);
 		PResult SendAll(const void* data, uint32_t numberOfBytes);
 		PResult ReceiveAll(void* destination, int numberOfBytes);
+		PResult SendPacket(Packet& packet);
+		PResult ReceivePacket(Packet& packet);
 
 		SocketHandle GetHandle();
 		IPVersion GetIPVersion();
