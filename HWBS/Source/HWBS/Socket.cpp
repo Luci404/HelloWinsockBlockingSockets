@@ -1,6 +1,7 @@
 #include "Socket.h"
 
 #include <assert.h>
+#include <iostream>
 
 namespace HWBS
 {
@@ -118,12 +119,18 @@ namespace HWBS
 
 	PResult Socket::Accept(Socket& outSocket)
 	{
-		SocketHandle acceptedConnectionHandle = accept(m_Handle, nullptr, nullptr); // Blocking!
+		sockaddr_in addr = {};
+		int len = sizeof(sockaddr_in);
+		SocketHandle acceptedConnectionHandle = accept(m_Handle, (sockaddr*)(&addr), &len); // Blocking!
 		if (acceptedConnectionHandle == INVALID_SOCKET)
 		{
 			int error = WSAGetLastError();
 			return PResult::P_NotYetImplemented;
 		}
+
+		IPEndpoint newConnectionEndpoint((sockaddr*)&addr);
+		std::cout << "Net socket accepted!" << std::endl;
+		newConnectionEndpoint.Print();
 
 		outSocket = Socket(IPVersion::IPv4, acceptedConnectionHandle);
 

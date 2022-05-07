@@ -12,13 +12,16 @@ namespace HWBS
 	{
 	public:
 		IPEndpoint(const char* ipAddress, uint16_t port);
-		
+		IPEndpoint(sockaddr* addr);
+
 		IPVersion GetIPVersion();
 		std::string GetHostname();
 		std::string GetIPString();
 		std::vector<uint8_t> GetIPBytes();
 		uint16_t GetPort();
 		sockaddr_in GetSockaddrIPv4();
+
+		void Print();
 
 	private:
 		IPVersion m_IPVersion;

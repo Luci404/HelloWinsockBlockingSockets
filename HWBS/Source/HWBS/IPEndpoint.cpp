@@ -1,6 +1,7 @@
 #include "IPEndpoint.h"
 
 #include <assert.h>
+#include <iostream>
 
 namespace HWBS
 {
@@ -56,6 +57,19 @@ namespace HWBS
 		}
 	}
 
+	IPEndpoint::IPEndpoint(sockaddr* addr)
+	{
+		assert(addr->sa_family == AF_INET);
+		sockaddr_in* addrv4 = reinterpret_cast<sockaddr_in*>(addr);
+		m_IPVersion = IPVersion::IPv4;
+		m_Port = ntohs(addrv4->sin_port);
+		m_IPBytes.resize(sizeof(ULONG));
+		memcpy(&m_IPBytes[0], &addrv4->sin_addr, sizeof(ULONG));
+		m_IPString.resize(16);
+		inet_ntop(AF_INET, &addrv4->sin_addr, &m_IPString[0], 16);
+		m_Hostname = m_IPString;
+	}
+
 	IPVersion IPEndpoint::GetIPVersion()
 	{
 		return m_IPVersion;
@@ -91,6 +105,18 @@ namespace HWBS
 
 		return addr;
 
+	}
+	void IPEndpoint::Print()
+	{
+		std::cout << "IP Version: " << ((m_IPVersion == IPVersion::IPv4) ? "IPv4" : "???") << std::endl;
+		std::cout << "Hostname: " << m_Hostname << std::endl;
+		std::cout << "IP: " << m_IPString<< std::endl;
+		std::cout << "Port: " << m_Port << std::endl;
+		std::cout << "IP Bytes..." << std::endl;
+		for (uint8_t digit : m_IPBytes)
+		{
+			std::cout << (int)digit << std::endl;
+		}
 	}
 }
 
