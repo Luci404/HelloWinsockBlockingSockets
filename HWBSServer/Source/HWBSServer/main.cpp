@@ -23,11 +23,10 @@ int main()
 					std::cout << "New connection accepted." << std::endl;
 
 					char buffer[256];
-					int bytesReceived = 0;
 					int result = HWBS::PResult::P_Success;
 					while (result == HWBS::PResult::P_Success)
 					{
-						result = newConnection.Receive(buffer, 256, bytesReceived);
+						result = newConnection.ReceiveAll(buffer, 256);
 						if (result != HWBS::PResult::P_Success)
 						{
 							break;

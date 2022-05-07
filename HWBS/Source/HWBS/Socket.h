@@ -26,6 +26,8 @@ namespace HWBS
 		PResult Connect(IPEndpoint endpoint);
 		PResult Send(void* data, uint32_t numberOfBytes, int& bytesSent);
 		PResult Receive(void* destination, int numberOfBytes, int& bytesReceived);
+		PResult SendAll(void* data, uint32_t numberOfBytes);
+		PResult ReceiveAll(void* destination, int numberOfBytes);
 
 		SocketHandle GetHandle();
 		IPVersion GetIPVersion();

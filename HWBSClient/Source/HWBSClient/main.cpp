@@ -19,11 +19,10 @@ int main()
 
 				char buffer[256];
 				strcpy_s(buffer, "Hello world from client!\0");
-				int bytesSent = 0;
 				int result = HWBS::PResult::P_Success;
 				while (result == HWBS::PResult::P_Success)
 				{
-					result = socket.Send(buffer, 256, bytesSent);
+					result = socket.SendAll(buffer, 256);
 					std::cout << "Attempting to send chunk of data..." << std::endl;
 					Sleep(500);
 				}
