@@ -4,6 +4,7 @@
 #include "HWBS/PResult.h"
 #include "HWBS/IPVersion.h"
 #include "HWBS/IPEndpoint.h"
+#include "HWBS/Constants.h"
 
 namespace HWBS
 {

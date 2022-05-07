@@ -32,6 +32,9 @@ int main()
 						
 						bufferSize = ntohl(bufferSize);
 
+						if (bufferSize > HWBS::g_MaxPacketSize)
+							break;
+
 						buffer.resize(bufferSize);
 						result = newConnection.ReceiveAll(&buffer[0], bufferSize);
 						if (result != HWBS::PResult::P_Success)
