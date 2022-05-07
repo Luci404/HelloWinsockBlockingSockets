@@ -18,19 +18,19 @@ namespace HWBS
 
 		if (m_Handle != INVALID_SOCKET)
 		{
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		m_Handle = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 		if (m_Handle == INVALID_SOCKET)
 		{
 			int error = WSAGetLastError();
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		if (SetSocketOption(SocketOption::TCP_NoDelay, true) != PResult::P_Success)
 		{
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		return PResult::P_Success;
@@ -40,7 +40,7 @@ namespace HWBS
 	{
 		if (m_Handle == INVALID_SOCKET)
 		{
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		int result = closesocket(m_Handle);
@@ -49,7 +49,7 @@ namespace HWBS
 		{
 			// An error occurred
 			int error = WSAGetLastError();
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		m_Handle = INVALID_SOCKET;
@@ -66,7 +66,7 @@ namespace HWBS
 		{
 			// An error occurred
 			int error = WSAGetLastError();
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		return PResult::P_Success;
@@ -76,14 +76,14 @@ namespace HWBS
 	{
 		if (Bind(endpoint) != PResult::P_Success)
 		{
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		int result = listen(m_Handle, backlog);
 		if (result != 0)
 		{
 			int error = WSAGetLastError();
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		return PResult::P_Success;
@@ -103,7 +103,7 @@ namespace HWBS
 		}
 		default:
 		{
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 		}
 
@@ -111,7 +111,7 @@ namespace HWBS
 		{
 			// An error occurred
 			int error = WSAGetLastError();
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		return PResult::P_Success;
@@ -125,7 +125,7 @@ namespace HWBS
 		if (acceptedConnectionHandle == INVALID_SOCKET)
 		{
 			int error = WSAGetLastError();
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		IPEndpoint newConnectionEndpoint((sockaddr*)&addr);
@@ -144,20 +144,20 @@ namespace HWBS
 		if (result != 0)
 		{
 			int error = WSAGetLastError();
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		return PResult::P_Success;
 	}
 
-	PResult Socket::Send(void* data, uint32_t numberOfBytes, int& bytesSent)
+	PResult Socket::Send(const void* data, uint32_t numberOfBytes, int& bytesSent)
 	{
 		bytesSent = send(m_Handle, (const char*)data, numberOfBytes, NULL);
 
 		if (bytesSent == SOCKET_ERROR)
 		{
 			int error = WSAGetLastError();
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		return PResult::P_Success;
@@ -169,19 +169,19 @@ namespace HWBS
 		
 		if (bytesReceived == 0) // If connection was gracefully closed
 		{
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		if (bytesReceived == SOCKET_ERROR)
 		{
 			int error = WSAGetLastError();
-			return PResult::P_NotYetImplemented;
+			return PResult::P_GenericError;
 		}
 
 		return PResult::P_Success;
 	}
 
-	PResult Socket::SendAll(void* data, uint32_t numberOfBytes)
+	PResult Socket::SendAll(const void* data, uint32_t numberOfBytes)
 	{
 		int totalBytesSent = 0;
 
@@ -193,7 +193,7 @@ namespace HWBS
 			PResult result = Send(bufferOffset, bytesRemaining, bytesSent);
 			if (result != PResult::P_Success)
 			{
-				return PResult::P_NotYetImplemented;
+				return PResult::P_GenericError;
 			}
 			totalBytesSent += bytesSent;
 		}
@@ -213,7 +213,7 @@ namespace HWBS
 			PResult result = Receive(bufferOffset, bytesRemaining, bytesReceived);
 			if (result != PResult::P_Success)
 			{
-				return PResult::P_NotYetImplemented;
+				return PResult::P_GenericError;
 			}
 			totalBytesReceived += bytesReceived;
 		}
