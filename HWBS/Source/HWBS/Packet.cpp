@@ -3,10 +3,29 @@
 
 namespace HWBS
 {
+	Packet::Packet(PacketType packetType)
+	{
+		Clear();
+		AssignPacketType(packetType);
+	}
+
+	PacketType Packet::GetPacketType()
+	{
+		PacketType* packetTypePtr = reinterpret_cast<PacketType*>(&Buffer[0]);
+		return static_cast<PacketType>(ntohs(*packetTypePtr));
+	}
+
+	void Packet::AssignPacketType(PacketType packetType)
+	{
+		PacketType* packetTypePtr = reinterpret_cast<PacketType*>(&Buffer[0]);
+		*packetTypePtr = static_cast<PacketType>(htons(packetType));
+	}
+
 	void Packet::Clear()
 	{
-		Buffer.clear();
-		ExtractionOffset = 0;
+		Buffer.resize(sizeof(PacketType));
+		AssignPacketType(PacketType::PT_Invalid);
+		ExtractionOffset = sizeof(PacketType);
 	}
 
 	void Packet::Append(const void* data, uint32_t size)

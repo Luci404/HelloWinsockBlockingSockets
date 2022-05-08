@@ -2,6 +2,39 @@
 
 #include <iostream>
 
+bool ProcessPacket(HWBS::Packet& packet)
+{
+	switch (packet.GetPacketType())
+	{
+	case HWBS::PacketType::PT_ChatMessage:
+	{
+		std::string message;
+		packet >> message;
+		std::cout << "Chat Message: " << message << std::endl;
+		break;
+	}
+	case HWBS::PacketType::PT_IntegerArray:
+	{
+		uint32_t arraySize = 0;
+		packet >> arraySize;
+		std::cout << "Array Size: " << arraySize << std::endl;
+		for (uint32_t i = 0; i < arraySize; i++)
+		{
+			uint32_t element = 0;
+			packet >> element;
+			std::cout << "Element[" << i << "] - " << element << std::endl;
+		}
+		break;
+	}
+	default:
+	{
+		break;
+	}
+	}
+
+	return true;
+}
+
 int main()
 {
 	if (HWBS::Network::Initialize())
@@ -22,8 +55,6 @@ int main()
 				{
 					std::cout << "New connection accepted." << std::endl;
 
-					uint32_t a(0), b(0), c(0);
-					std::string first, second, third;
 					HWBS::Packet packet;
 					while (true)
 					{
@@ -32,15 +63,8 @@ int main()
 						if (result != HWBS::PResult::P_Success)
 							break;
 
-						try
-						{
-							packet >> a >> b >> c >> first >> second;
-						}
-						catch (HWBS::PacketException& exception)
-						{
-							std::cout << exception.What() << std::endl;
-						}
-						std::cout << a << ", " << b << ", " << c <<  ", " << first  << ", " << second << std::endl;
+						if (!ProcessPacket(packet))
+							break;
 					}
 
 					newConnection.Close();

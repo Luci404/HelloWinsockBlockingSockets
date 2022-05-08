@@ -17,16 +17,29 @@ int main()
 			{
 				std::cout << "Successfully connected to server." << std::endl;
 
-				uint32_t a, b, c;
-				a = 4;
-				b = 6;
-				c = 9;
-				std::string first("first"), second("second");
-				HWBS::Packet packet;
-				packet << a << b << c << first << second;
+				HWBS::Packet stringPacket(HWBS::PacketType::PT_ChatMessage);
+				stringPacket << std::string("This is my string packet!");
+
+				HWBS::Packet integerArrayPacket(HWBS::PacketType::PT_IntegerArray);
+				const uint32_t arraySize = 6;
+				const uint32_t integerArray[arraySize] = { 1, 2, 3, 4, 5, 6 };
+				integerArrayPacket << arraySize;
+				for (uint32_t i : integerArray) integerArrayPacket << i;
+
+
 				while (true)
 				{
-					HWBS::PResult result = socket.SendPacket(packet);
+					HWBS::PResult result;
+
+					if (rand() % 2 == 0)
+					{
+						result = socket.SendPacket(stringPacket);
+					}
+					else
+					{
+						result = socket.SendPacket(integerArrayPacket);
+					}
+					
 					if (result != HWBS::PResult::P_Success)
 						break;
 

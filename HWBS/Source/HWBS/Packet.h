@@ -1,7 +1,8 @@
 #pragma once
 
-#include <HWBS/PacketException.h>
-#include <HWBS/Constants.h>
+#include "HWBS/PacketException.h"
+#include "HWBS/Constants.h"
+#include "HWBS/PacketType.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <vector>
@@ -13,6 +14,10 @@ namespace HWBS
 	class Packet
 	{
 	public:
+		Packet(PacketType packetType = PacketType::PT_Invalid);
+		PacketType GetPacketType();
+		void AssignPacketType(PacketType packetType);
+
 		void Clear();
 		void Append(const void* data, uint32_t size);
 
