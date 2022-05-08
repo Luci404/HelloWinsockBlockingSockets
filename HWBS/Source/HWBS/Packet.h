@@ -1,5 +1,8 @@
 #pragma once
 
+#include <HWBS/PacketException.h>
+#include <HWBS/Constants.h>
+
 #define WIN32_LEAN_AND_MEAN
 #include <vector>
 #include <winsock.h>

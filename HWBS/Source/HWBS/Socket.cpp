@@ -245,6 +245,9 @@ namespace HWBS
 			return PResult::P_GenericError;
 
 		uint32_t bufferSize = ntohl(encodedSize);
+		if (bufferSize > g_MaxPacketSize)
+			return PResult::P_GenericError;
+
 		packet.Buffer.resize(bufferSize);
 		result = ReceiveAll(&packet.Buffer[0], bufferSize);
 		if (result != PResult::P_Success)
